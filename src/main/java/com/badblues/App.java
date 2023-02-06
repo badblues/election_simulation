@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 
 import java.io.IOException;
 
+
+
 public class App extends Application {
 
     private Stage stage;
