@@ -8,7 +8,10 @@ import javafx.scene.Scene;
 
 import java.io.IOException;
 
-
+//TODO: fix spawning candidates before electors
+//TODO: debug work of Vote for one
+//TODO: made Rate all, Vote for any
+//TODO: make shit pretty a lil bit
 
 public class App extends Application {
 
