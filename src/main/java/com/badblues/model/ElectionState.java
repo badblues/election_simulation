@@ -68,8 +68,17 @@ public class ElectionState {
                 e.setColor(Color.GREY);
             winner = null;
         } else {
-            for (Integer i : candidates.values())
-                i = 0;
+            System.out.println("before zeroing");
+            for (Person candidate : candidates.keySet()) {
+                System.out.println(candidate.getColor() + " - " + candidates.get(candidate));
+            }
+            for (Person candidate : candidates.keySet()) {
+                candidates.replace(candidate, 0);
+            }
+            System.out.println("after zeroing");
+            for (Person candidate : candidates.keySet()) {
+                System.out.println(candidate.getColor() + " - " + candidates.get(candidate));
+            }
             switch(mode) {
                 case "Vote for one":
                     voteForOne();
@@ -81,12 +90,16 @@ public class ElectionState {
                     voteForAny();
                     break;
             }
+            //print votes
+            System.out.println("after counting");
+            for (Person candidate : candidates.keySet()) {
+                System.out.println(candidate.getColor() + " - " + candidates.get(candidate));
+            }
             winner = (Person)candidates.keySet().toArray()[0];
             for (Person candidate : candidates.keySet()) {
                 if (candidates.get(candidate) > candidates.get(winner))
                     winner = candidate;
             }
-
         }
     }
 
@@ -125,6 +138,10 @@ public class ElectionState {
             return Color.GREY;
         return winner.getColor();
     } 
+
+    public int getVotes(Person candidate) {
+        return candidates.get(candidate);
+    }
 
     public Map<Double, Person> orderCandidates(Person elector) {
         Map<Double, Person> orderedCandidates = new TreeMap<Double, Person>(); 

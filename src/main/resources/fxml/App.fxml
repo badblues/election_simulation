@@ -26,6 +26,31 @@
                   <Font size="39.0" />
                </font>
             </Label>
+            <Label fx:id="votesLabel1" layoutX="192.0" layoutY="364.0" text="0" visible="false">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="votesLabel5" layoutX="192.0" layoutY="464.0" text="0" visible="false">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="votesLabel4" layoutX="192.0" layoutY="439.0" text="0" visible="false">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="votesLabel2" layoutX="192.0" layoutY="389.0" text="0" visible="false">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="votesLabel3" layoutX="192.0" layoutY="414.0" text="0" visible="false">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
          </children></Pane>
    </children>
 </AnchorPane>

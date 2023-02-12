@@ -12,6 +12,8 @@ import java.io.IOException;
 //TODO: debug work of Vote for one
 //TODO: made Rate all, Vote for any
 //TODO: make shit pretty a lil bit
+//TODO: tie data to view without controller
+
 
 public class App extends Application {
 

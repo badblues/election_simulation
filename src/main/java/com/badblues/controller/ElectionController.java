@@ -14,6 +14,8 @@ import javafx.scene.input.MouseEvent;
 import java.util.Set;
 import java.net.URL;
 import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 
 public class ElectionController implements Initializable {
@@ -30,14 +32,28 @@ public class ElectionController implements Initializable {
     ComboBox<String> modeCB;
     @FXML
     Label winnerLabel;
+    @FXML
+    Label votesLabel1;
+    @FXML
+    Label votesLabel2;
+    @FXML
+    Label votesLabel3;
+    @FXML
+    Label votesLabel4;
+    @FXML
+    Label votesLabel5;
 
     ElectionState state = ElectionState.getInstance();
+
+    Label[] labels;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println(state.getModes()[0]);
         modeCB.getItems().addAll(state.getModes());
         modeCB.setValue(state.getModes()[0]);
+        labels = new Label[] {votesLabel1, votesLabel2, votesLabel3, votesLabel4, votesLabel5};
+
     }
 
     public void createRandomElectors() {
@@ -75,13 +91,21 @@ public class ElectionController implements Initializable {
             circle.setCenterY(e.getY() * fieldPane.getHeight() / state.SCALE_SIZE);
             fieldPane.getChildren().addAll(circle);
         }
+        int i = 0;
         for (Person c : state.getCandidates()) {
             Circle circle = new Circle(8, c.getColor());
             circle.setCenterX(c.getX() * fieldPane.getWidth() / state.SCALE_SIZE);
             circle.setCenterY(c.getY() * fieldPane.getHeight() / state.SCALE_SIZE);
             fieldPane.getChildren().addAll(circle);
+            System.out.println("labels:\n" + labels);
+            Label lb = labels[i++];
+            lb.setText("" + state.getVotes(c));
+            lb.setTextFill(c.getColor());
+            lb.setVisible(true);
         }
+
         winnerLabel.setTextFill(state.getWinnerColor());
+
     }
 
     public void clearCandidates() {
