@@ -30,6 +30,7 @@ public class ElectionState {
     private Person winner = null;
     String[] modes = {"Vote for one", "Rank all", "Vote for any"};
     String mode = modes[0];
+    private int voteRange = 25;
     
 
     public static synchronized ElectionState getInstance() {
@@ -115,21 +116,30 @@ public class ElectionState {
 
     private void rankAll() {
         for (Person e : electors) {
-            Person firstCandidate = (Person) orderCandidates(e).values().toArray()[0];
-            Integer v = candidates.get(firstCandidate);
-            candidates.replace(firstCandidate, v + 1);
-            Color color = firstCandidate.getColor();
+            int id = 5;
+            Map<Double, Person> ordered = orderCandidates(e);
+            for (Person candidate : ordered.values()) {
+                Integer v = candidates.get(candidate);
+                candidates.replace(candidate, v + id--);
+            }
+            Color color = ((Person)(ordered.values().toArray()[0])).getColor();
             e.setColor(color);
         }
     }
 
     private void voteForAny() {
         for (Person e : electors) {
-            Person firstCandidate = (Person) orderCandidates(e).values().toArray()[0];
-            Integer v = candidates.get(firstCandidate);
-            candidates.replace(firstCandidate, v + 1);
-            Color color = firstCandidate.getColor();
-            e.setColor(color);
+            e.setColor(Color.GREY);
+            Map<Double, Person> ordered = orderCandidates(e);
+            for (Double range : ordered.keySet()) {
+                if (range < voteRange * 10) {
+                    Person candidate = ordered.get(range);
+                    Integer v = candidates.get(candidate);
+                    candidates.replace(candidate, v + 1);
+                    Color color = ((Person)(orderCandidates(e).values().toArray()[0])).getColor();
+                    e.setColor(color);
+                }
+            }
         }
     }
 
@@ -146,7 +156,7 @@ public class ElectionState {
     public Map<Double, Person> orderCandidates(Person elector) {
         Map<Double, Person> orderedCandidates = new TreeMap<Double, Person>(); 
         for (Person candidate : candidates.keySet()) {
-            double len = Math.sqrt(Math.pow(elector.getX() - candidate.getX(),2) + Math.pow(elector.getY() - candidate.getY(),2));
+            double len = Math.sqrt(Math.pow(elector.getX() - candidate.getX(),2) + Math.pow(elector.getY() - candidate.getY(),2)) ;
             orderedCandidates.put(len, candidate);
         }
         return orderedCandidates;
@@ -172,5 +182,13 @@ public class ElectionState {
 
     public void setMode(String mode) {
         this.mode = mode;
+    }
+
+    public int getVoteRange() {
+        return voteRange;
+    }
+
+    public void setVoteRange(int radius) {
+        this.voteRange = radius;
     }
 }

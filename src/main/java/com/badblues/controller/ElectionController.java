@@ -58,6 +58,7 @@ public class ElectionController implements Initializable {
 
     public void createRandomElectors() {
         state.createElectors();
+        state.countVotes();
         redraw();
     }
 
@@ -80,6 +81,8 @@ public class ElectionController implements Initializable {
 
     public void redraw() {
         fieldPane.getChildren().clear();
+        for (int i = 0; i < 5; i++)
+            labels[i].setVisible(false);    
         
         Line hline = new Line(0, fieldPane.getHeight()/2, fieldPane.getWidth(), fieldPane.getHeight()/2);
         Line vline = new Line(fieldPane.getWidth()/2, 0, fieldPane.getWidth()/2, fieldPane.getHeight());
@@ -116,5 +119,7 @@ public class ElectionController implements Initializable {
 
     public void changeMode() {
         state.setMode(modeCB.getValue());
+        state.countVotes();
+        redraw(); 
     }
 }
