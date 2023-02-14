@@ -24,13 +24,13 @@ public class ElectionState {
         put(0, Color.RED);
         put(1, Color.BLUE);
         put(2, Color.GREEN);
-        put(3, Color.YELLOW);
+        put(3, Color.BROWN);
         put(4, Color.PURPLE);
     }};
     private Person winner = null;
     String[] modes = {"Vote for one", "Rank all", "Vote for any"};
     String mode = modes[0];
-    private int voteRange = 25;
+    private int voteRadius = 25;
     
 
     public static synchronized ElectionState getInstance() {
@@ -132,7 +132,7 @@ public class ElectionState {
             e.setColor(Color.GREY);
             Map<Double, Person> ordered = orderCandidates(e);
             for (Double range : ordered.keySet()) {
-                if (range < voteRange * 10) {
+                if (range < voteRadius * 10) {
                     Person candidate = ordered.get(range);
                     Integer v = candidates.get(candidate);
                     candidates.replace(candidate, v + 1);
@@ -184,11 +184,11 @@ public class ElectionState {
         this.mode = mode;
     }
 
-    public int getVoteRange() {
-        return voteRange;
+    public int getVoteRadius() {
+        return voteRadius;
     }
 
-    public void setVoteRange(int radius) {
-        this.voteRange = radius;
+    public void setVoteRadius(int radius) {
+        this.voteRadius = radius;
     }
 }

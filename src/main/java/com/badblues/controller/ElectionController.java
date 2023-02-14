@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import javafx.scene.control.Slider;
 
 
 public class ElectionController implements Initializable {
@@ -42,6 +43,8 @@ public class ElectionController implements Initializable {
     Label votesLabel4;
     @FXML
     Label votesLabel5;
+    @FXML
+    Slider voteRadiusSlider;
 
     ElectionState state = ElectionState.getInstance();
 
@@ -53,7 +56,7 @@ public class ElectionController implements Initializable {
         modeCB.getItems().addAll(state.getModes());
         modeCB.setValue(state.getModes()[0]);
         labels = new Label[] {votesLabel1, votesLabel2, votesLabel3, votesLabel4, votesLabel5};
-
+        createRandomElectors();
     }
 
     public void createRandomElectors() {
@@ -99,6 +102,7 @@ public class ElectionController implements Initializable {
             Circle circle = new Circle(8, c.getColor());
             circle.setCenterX(c.getX() * fieldPane.getWidth() / state.SCALE_SIZE);
             circle.setCenterY(c.getY() * fieldPane.getHeight() / state.SCALE_SIZE);
+            circle.setStroke(Color.BLACK);
             fieldPane.getChildren().addAll(circle);
             System.out.println("labels:\n" + labels);
             Label lb = labels[i++];
@@ -118,8 +122,20 @@ public class ElectionController implements Initializable {
     }
 
     public void changeMode() {
-        state.setMode(modeCB.getValue());
+        String mode = modeCB.getValue();
+        if (mode == "Vote for any")
+            voteRadiusSlider.setVisible(true);
+        else
+            voteRadiusSlider.setVisible(false);
+        state.setMode(mode);
         state.countVotes();
         redraw(); 
     }
+
+    public void sliderChange() {
+        state.setVoteRadius((int)voteRadiusSlider.getValue());
+        state.countVotes();
+        redraw();
+    }
+
 }
