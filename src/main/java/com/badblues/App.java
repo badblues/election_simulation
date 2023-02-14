@@ -5,12 +5,7 @@ import javafx.stage.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
 import java.io.IOException;
-
-//TODO: make shit pretty a lil bit
-//TODO: tie data to view without controller
-
 
 public class App extends Application {
 

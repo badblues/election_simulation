@@ -52,11 +52,10 @@ public class ElectionController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        System.out.println(state.getModes()[0]);
         modeCB.getItems().addAll(state.getModes());
         modeCB.setValue(state.getModes()[0]);
         labels = new Label[] {votesLabel1, votesLabel2, votesLabel3, votesLabel4, votesLabel5};
-        createRandomElectors();
+        state.createElectors();
     }
 
     public void createRandomElectors() {
@@ -66,7 +65,6 @@ public class ElectionController implements Initializable {
     }
 
     public void spawnCandidate(MouseEvent event) {
-        System.out.println("x = " + event.getX() + " y = " + event.getY());
         int x = (int) event.getX() * state.SCALE_SIZE / (int) fieldPane.getWidth();
         int y = (int) event.getY() * state.SCALE_SIZE / (int) fieldPane.getHeight();
 
@@ -99,16 +97,25 @@ public class ElectionController implements Initializable {
         }
         int i = 0;
         for (Person c : state.getCandidates()) {
-            Circle circle = new Circle(8, c.getColor());
-            circle.setCenterX(c.getX() * fieldPane.getWidth() / state.SCALE_SIZE);
-            circle.setCenterY(c.getY() * fieldPane.getHeight() / state.SCALE_SIZE);
+            Circle circle = new Circle(10, c.getColor());
+            double x = c.getX() * fieldPane.getWidth() / state.SCALE_SIZE;
+            double y = c.getY() * fieldPane.getHeight() / state.SCALE_SIZE;
+            circle.setCenterX(x);
+            circle.setCenterY(y);
             circle.setStroke(Color.BLACK);
             fieldPane.getChildren().addAll(circle);
-            System.out.println("labels:\n" + labels);
             Label lb = labels[i++];
             lb.setText("" + state.getVotes(c));
             lb.setTextFill(c.getColor());
             lb.setVisible(true);
+            if (state.getMode() == "Vote for any") {
+                Circle radiusCircle = new Circle(state.getVoteRadius() * fieldPane.getWidth() / state.SCALE_SIZE);
+                radiusCircle.setCenterX(x);
+                radiusCircle.setCenterY(y);
+                radiusCircle.setFill(Color.color(0,0,0,0));
+                radiusCircle.setStroke(c.getColor());
+                fieldPane.getChildren().addAll(radiusCircle);
+            }
         }
 
         winnerLabel.setTextFill(state.getWinnerColor());

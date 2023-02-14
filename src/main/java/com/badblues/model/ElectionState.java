@@ -21,16 +21,17 @@ public class ElectionState {
     public static final int ELECTORS_NUM = 1000;
     private int candidatesCounter = 0;
     Map<Integer, Color> colors = new HashMap<Integer, Color>(){{
-        put(0, Color.RED);
-        put(1, Color.BLUE);
-        put(2, Color.GREEN);
-        put(3, Color.BROWN);
-        put(4, Color.PURPLE);
+        put(0, Color.web("#40F99B"));
+        put(1, Color.web("#97D2FB"));
+        put(2, Color.web("#9D69A3"));
+        put(3, Color.web("#F5FBEF"));
+        put(4, Color.web("#E85D75"));
     }};
+    Color defaultColor = Color.BLACK;
     private Person winner = null;
     String[] modes = {"Vote for one", "Rank all", "Vote for any"};
     String mode = modes[0];
-    private int voteRadius = 25;
+    private double voteRadius = 25;
     
 
     public static synchronized ElectionState getInstance() {
@@ -40,7 +41,7 @@ public class ElectionState {
 	}
 
     public Person createElector(int x, int y) {
-        Person elector = new Person(x,y, Color.GREY);
+        Person elector = new Person(x,y, defaultColor);
         electors.add(elector);
         return elector;
     }
@@ -66,20 +67,9 @@ public class ElectionState {
     public void countVotes() {
         if (candidates.isEmpty()) {
             for (Person e : electors)
-                e.setColor(Color.GREY);
+                e.setColor(defaultColor);
             winner = null;
         } else {
-            System.out.println("before zeroing");
-            for (Person candidate : candidates.keySet()) {
-                System.out.println(candidate.getColor() + " - " + candidates.get(candidate));
-            }
-            for (Person candidate : candidates.keySet()) {
-                candidates.replace(candidate, 0);
-            }
-            System.out.println("after zeroing");
-            for (Person candidate : candidates.keySet()) {
-                System.out.println(candidate.getColor() + " - " + candidates.get(candidate));
-            }
             switch(mode) {
                 case "Vote for one":
                     voteForOne();
@@ -90,11 +80,6 @@ public class ElectionState {
                 case "Vote for any":
                     voteForAny();
                     break;
-            }
-            //print votes
-            System.out.println("after counting");
-            for (Person candidate : candidates.keySet()) {
-                System.out.println(candidate.getColor() + " - " + candidates.get(candidate));
             }
             winner = (Person)candidates.keySet().toArray()[0];
             for (Person candidate : candidates.keySet()) {
@@ -129,10 +114,10 @@ public class ElectionState {
 
     private void voteForAny() {
         for (Person e : electors) {
-            e.setColor(Color.GREY);
+            e.setColor(defaultColor);
             Map<Double, Person> ordered = orderCandidates(e);
             for (Double range : ordered.keySet()) {
-                if (range < voteRadius * 10) {
+                if (range < (voteRadius)) {
                     Person candidate = ordered.get(range);
                     Integer v = candidates.get(candidate);
                     candidates.replace(candidate, v + 1);
@@ -145,7 +130,7 @@ public class ElectionState {
 
     public Color getWinnerColor() {
         if (winner == null)
-            return Color.GREY;
+            return defaultColor;
         return winner.getColor();
     } 
 
@@ -180,15 +165,19 @@ public class ElectionState {
         return modes;
     }
 
+    public String getMode() {
+        return mode;
+    }
+
     public void setMode(String mode) {
         this.mode = mode;
     }
 
-    public int getVoteRadius() {
+    public double getVoteRadius() {
         return voteRadius;
     }
 
-    public void setVoteRadius(int radius) {
+    public void setVoteRadius(double radius) {
         this.voteRadius = radius;
     }
 }
