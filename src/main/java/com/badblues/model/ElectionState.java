@@ -69,7 +69,10 @@ public class ElectionState {
             for (Person e : electors)
                 e.setColor(defaultColor);
             winner = null;
-        } else {
+        } else { 
+            for (Person candidate : candidates.keySet()) {
+                candidates.replace(candidate, 0);
+            }
             switch(mode) {
                 case "Vote for one":
                     voteForOne();
